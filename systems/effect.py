@@ -211,7 +211,7 @@ def create_effect_templates():
 
     e = Entity("effect-fire")
     e.motion = MotionComponent(layer=motion.LAYER_EFFECTS)
-    e.sprite = SpriteComponent.from_circle(16, (255,0,0))
+    e.sprite = SpriteComponent.from_resource("effects/fire.png")
     e.effect = EffectComponent(name="fire", cast_from=[tilemap.TILE_PLANT], shape=SHAPE_WAVE, damage=200)
     e.effect.add_harvest(tilemap.TILE_PLANT, tilemap.TILE_EMBER, 3, True)
     e.effect.add_harvest(tilemap.TILE_WATER, tilemap.TILE_MUD, -3)
@@ -223,7 +223,7 @@ def create_effect_templates():
 
     e = Entity("effect-wave")
     e.motion = MotionComponent(layer=motion.LAYER_EFFECTS)
-    e.sprite = SpriteComponent.from_circle(16, (0,0,255))
+    e.sprite = SpriteComponent.from_resource("effects/water.png")
     e.effect = EffectComponent(name="wave", cast_from=[tilemap.TILE_WATER],shape=SHAPE_WAVE, damage=100)
     e.effect.add_harvest(tilemap.TILE_WATER, tilemap.TILE_MUD, 3, True)
     e.effect.add_harvest(tilemap.TILE_EARTH, tilemap.TILE_MUD, 0)
@@ -232,7 +232,7 @@ def create_effect_templates():
 
     e = Entity("effect-growth")
     e.motion = MotionComponent(layer=motion.LAYER_EFFECTS)
-    e.sprite = SpriteComponent.from_circle(16, (0,255,0))
+    e.sprite = SpriteComponent.from_resource("effects/growth.png")
     e.effect = EffectComponent(name="growth",cast_from=[tilemap.TILE_MUD], damage=25)
     e.effect.add_harvest(tilemap.TILE_MUD, tilemap.TILE_PLANT, 10, True)
     e.effect.add_harvest(tilemap.TILE_EARTH, tilemap.TILE_PLANT, 0)
@@ -243,7 +243,7 @@ def create_effect_templates():
 
     e = Entity("effect-spark")
     e.motion = MotionComponent(layer=motion.LAYER_EFFECTS)
-    e.sprite = SpriteComponent.from_circle(16, (255,255,0))
+    e.sprite = SpriteComponent.from_resource("effects/spark.png")
     e.effect = EffectComponent(name="spark",cast_from=[tilemap.TILE_EMBER], shape=SHAPE_LANCE, damage=300)
     e.effect.add_harvest(tilemap.TILE_EMBER, tilemap.TILE_EARTH, 2, True)
     e.sound = SoundComponent(sound_file='assets/sounds/zap.mp3', volume=0.5, state=0)
@@ -251,14 +251,14 @@ def create_effect_templates():
 
     e = Entity("effect-ice")
     e.motion = MotionComponent(layer=motion.LAYER_EFFECTS)
-    e.sprite = SpriteComponent.from_circle(16, (127,127,255))
+    e.sprite = SpriteComponent.from_resource("effects/ice.png")
     e.effect = EffectComponent(name="ice", cast_from=[tilemap.TILE_WATER], shape=SHAPE_LANCE, damage=100)
     e.effect.add_harvest(tilemap.TILE_WATER, tilemap.TILE_ICE, 2, True)
     effect_dict[e.effect.name] = e
 
     e = Entity("effect-corrupt")
     e.motion = MotionComponent(layer=motion.LAYER_EFFECTS)
-    e.sprite = SpriteComponent.from_circle(16, (127,0,127))
+    e.sprite = SpriteComponent.from_resource("effects/corrupt.png")
     e.effect = EffectComponent(name="corrupt", cast_from=[tilemap.TILE_BONES], shape=SHAPE_FILL, damage=25)
     e.effect.add_harvest(tilemap.TILE_ICE, tilemap.TILE_OOZE, 2, True)
     e.effect.add_harvest(tilemap.TILE_MUD, tilemap.TILE_MARSH, 2, True)
@@ -269,7 +269,7 @@ def create_effect_templates():
 
     e = Entity("effect-purify")
     e.motion = MotionComponent(layer=motion.LAYER_EFFECTS)
-    e.sprite = SpriteComponent.from_circle(16, (255,255,200))
+    e.sprite = SpriteComponent.from_resource("effects/purify.png")
     e.effect = EffectComponent(name="purify", cast_from=[tilemap.TILE_BONES], shape=SHAPE_FILL, damage=0)
     e.effect.add_harvest(tilemap.TILE_OOZE, tilemap.TILE_ICE, 2, True)
     e.effect.add_harvest(tilemap.TILE_MARSH, tilemap.TILE_MUD, 2, True)
