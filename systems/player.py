@@ -86,7 +86,7 @@ def mount_player_system(group: EntityGroup):
     group.add(player)
 
     health_box = Entity("health_box")
-    health_box.motion = MotionComponent(position=Vector2(10,90))
+    health_box.motion = MotionComponent(position=Vector2(10,130))
     health_box.ui = UIComponent(text="Health: " + str(player.health.health))
     # So, this will probably cause issues. Sue me.
     health_box.health = player.health
