@@ -20,6 +20,7 @@ ENEMY_TYPES = {
 LEVELS = {
     1: {
         'spawn_area': (120, 120, 1, 16),
+        'spawn_interval': 10,
         'enemies': {
             'mook': 5,
             'boss': 1
@@ -107,9 +108,10 @@ def level_progression_system(group: EntityGroup):
             map: TilemapComponent = group.query_singleton('tilemap').tilemap
             map.bounds = Rect(Vector2(len(map.map))/2 - Vector2(level_config['map_bounds']) / 2, level_config['map_bounds'])
             spawn_area = Rect(level_config['spawn_area'])
+            spawn_interval = level_config.get('spawn_interval', 5)
             for enemy_type, count in level_config['enemies'].items():
                 spawn = Entity('spawn')
-                spawn.spawn = EnemySpawnComponent(enemy_type=enemy_type, count=count, interval=5, area=spawn_area)
+                spawn.spawn = EnemySpawnComponent(enemy_type=enemy_type, count=count, interval=spawn_interval, area=spawn_area)
                 spawn.motion = MotionComponent(position=spawn_area.topleft)
                 group.add(spawn)
         else:
