@@ -61,6 +61,15 @@ def player_update_system(group: EntityGroup):
     if "skip_start" in controls.actions:
         t.waiting = False
 
+    if 'up_start' in controls.actions:
+        player.sprite = SpriteComponent.from_resource("player/player_up.png")
+    elif 'down_start' in controls.actions:
+        player.sprite = SpriteComponent.from_resource("player/player_down.png")
+    elif 'left_start' in controls.actions:
+        player.sprite = SpriteComponent.from_resource("player/player_l.png")
+    elif 'right_start' in controls.actions:
+        player.sprite = SpriteComponent.from_resource("player/player_r.png")
+
 
 
 '''
@@ -70,7 +79,7 @@ def mount_player_system(group: EntityGroup):
     player = Entity("player")
     player.player = PlayerComponent()
     player.motion = MotionComponent(layer=motion.LAYER_PLAYER, position=Vector2(128,128))
-    player.sprite = SpriteComponent.from_resource("creatures/wizard.png")
+    player.sprite = SpriteComponent.from_resource("player/player_down.png")
     player.health = HealthComponent(health = 100)
     group.add(player)
 
