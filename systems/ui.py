@@ -27,7 +27,7 @@ def mount_ui_system(group: EntityGroup):
     pygame.font.init()
 
     font_entity = Entity("font")
-    font_entity.font = FontComponent(font=pygame.font.SysFont('Comic Sans MS', 30))
+    font_entity.font = FontComponent(font=pygame.font.SysFont('Comic Sans MS', 20))
 
     group.add(font_entity)
 

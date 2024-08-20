@@ -83,7 +83,7 @@ def draw_sprite_system(group: EntityGroup):
     if selected_spell.target_tile:
         for i, tile in enumerate(selected_spell.target_tile):
             hint_sprite = TILE_SPRITES.get(tile) or asset_pipeline.get_image('tiles/unknown.png')
-            hint_pos = (10 + i * 40, 80)
+            hint_pos = (10 + i * 40, 95)
             surface.blit(hint_sprite, hint_pos)
 
     tile_center = Vector2(scale / 2)
