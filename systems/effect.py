@@ -252,6 +252,8 @@ def create_effect_templates():
     e.effect = EffectComponent(name="spark",cast_from=[tilemap.TILE_EMBER,tilemap.TILE_MARSH], shape=SHAPE_LANCE, damage=300)
     e.effect.add_harvest(tilemap.TILE_EMBER, tilemap.TILE_EARTH, 2, True)
     e.effect.add_harvest(tilemap.TILE_MARSH, tilemap.TILE_OOZE, 2, True)
+    e.effect.add_chain(tilemap.TILE_EMBER, 0.15)
+    e.effect.add_chain(tilemap.TILE_MARSH, 0.15)
     e.sound = SoundComponent(sound_file='assets/sounds/zap.mp3', volume=0.5, state=0)
     effect_dict[e.effect.name] = e
 
