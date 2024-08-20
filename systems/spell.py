@@ -82,13 +82,14 @@ def spell_select_system(group: EntityGroup):
 
 def spell_cast_system(group: EntityGroup):
     controls: ControlComponent = group.query_singleton('controls').controls
+    game = group.query_singleton('game').game
     selected_spell_entity: SelectedSpellComponent = group.query_singleton('selected_spell', 'tile_area')
     selected_spell_entity: SelectedSpellComponent = selected_spell_entity
     selected_spell: SelectedSpellComponent = selected_spell_entity.selected_spell
     tile_area: TileAreaComponent = selected_spell_entity.tile_area
     turn: TurnComponent = group.query_singleton('turn').turn
 
-    if not turn.waiting:
+    if not turn.waiting or game.state != game.STATE_PLAYING:
         return
     
     if selected_spell.spell_casting_start:
