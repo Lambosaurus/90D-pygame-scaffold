@@ -58,6 +58,7 @@ TILE_SPRITES = {
     TILE_MARSH: asset_pipeline.get_image('tiles/marsh.png'),
     TILE_OOZE: asset_pipeline.get_image('tiles/ooze.png'),
     TILE_ROCK: asset_pipeline.get_image('tiles/rock.png'),
+    TILE_BONES: asset_pipeline.get_image('tiles/bones.png'),
 }
 
 '''
