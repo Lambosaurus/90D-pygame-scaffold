@@ -131,7 +131,7 @@ def effect_update_system(group: EntityGroup):
                 # Waves start waves in valid adjacent tiles
                 for coord in valid_tiles(map, effect.propagates_to, utils.vector_normals(pos, dir)):
                     propagation_request.append( (coord, 0, SHAPE_WAVE) )
-                unchecked_coords = [-dir]
+                unchecked_coords = [pos-dir]
 
             elif effect.shape == SHAPE_FILL:
                 # Goes out in all directions
@@ -242,7 +242,7 @@ def create_effect_templates():
     e.effect.add_harvest(tilemap.TILE_ASH, tilemap.TILE_MARSH, 7, True)
     e.effect.add_chain(tilemap.TILE_MUD, 0.25)
     e.effect.add_chain(tilemap.TILE_EARTH, 0.25)
-    e.effect.add_chain(tilemap.TILE_MARSH, 0.25)
+    e.effect.add_chain(tilemap.TILE_ASH, 0.25)
     e.sound = SoundComponent(sound_file='assets/sounds/grow.mp3', volume=0.5, state=0)
     effect_dict[e.effect.name] = e
 
