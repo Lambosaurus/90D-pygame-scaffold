@@ -102,11 +102,24 @@ def create_enemy(position = tuple[int, int]):
 
 COST_MAPPING = {
     tilemap.TILE_EARTH: 1,
-    tilemap.TILE_WATER: 3,
+    
     tilemap.TILE_MUD:   2,
     tilemap.TILE_PLANT: 2,
-    tilemap.TILE_EMBER: 3.
+    tilemap.TILE_MARSH: 2,
+    tilemap.TILE_ASH: 2,
+    
+    tilemap.TILE_WATER: 3,
+    tilemap.TILE_EMBER: 3,
+    tilemap.TILE_ROCK: 3,
+    tilemap.TILE_ICE: 3,
+    tilemap.TILE_HELLSCAPE: 3,
+    tilemap.TILE_OOZE: 4,
+
+    tilemap.TILE_BONES: 10,
 }
+
+for tile in tilemap.IMPASSABLE_TILES:
+    COST_MAPPING[tile] = 100
 
 '''
 Calculating cost of individual tile for A*
