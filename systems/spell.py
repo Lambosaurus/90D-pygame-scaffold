@@ -101,6 +101,12 @@ def spell_cast_system(group: EntityGroup):
             pygame.draw.line(surface, selected_spell.spell_color, Vector2(scale), Vector2(scale) + (effect_direction * scale), 5)
             pygame.draw.circle(surface, selected_spell.spell_color, Vector2(scale), 8)
             camera.surface.blit(surface, (selected_spell.spell_casting_start * scale + offset) - Vector2(scale))
+
+            sq = pygame.surface.Surface(Vector2(scale), pygame.SRCALPHA)
+            pygame.draw.polygon(sq, selected_spell.spell_color, [(1,1), (1,scale-1), (scale-1,scale-1), (scale-1,1)], 1)
+            for coord in tile_area.tile_positions:
+                ss_coord = (coord * scale) + offset - Vector2(scale/2)
+                camera.surface.blit(sq, ss_coord)
         
 
     if "mouse_0_start" in controls.actions:
