@@ -36,7 +36,7 @@ def enemy_update_system(group: EntityGroup):
 
         if t.state == turn.TURN_ENEMY:
             motion: MotionComponent = e.motion
-            mtp = a_star(tm.map, (e.motion.position.x, e.motion.position.y), (player.motion.position.x, player.motion.position.y))
+            mtp = a_star(tm, (e.motion.position.x, e.motion.position.y), (player.motion.position.x, player.motion.position.y))
             motion.velocity = mtp
 
             if player.motion.position == e.motion.position + mtp:
@@ -136,7 +136,7 @@ def heuristic(a, b):
 '''
 A* algorithm implementation including. Returns next immediate velocity for enemy to take
 '''
-def a_star(map, e_pos, p_pos):
+def a_star(tilemap: TilemapComponent, e_pos, p_pos):
 
     frontier = PriorityQueue()
     frontier.put((0, e_pos))  # Priority queue stores (priority, node)
@@ -164,12 +164,12 @@ def a_star(map, e_pos, p_pos):
         for next in neighbors:
             # Check if next position is within grid bounds
 
-            if 0 <= next[0] < len(map) and 0 <= next[1] < len(map[0]):
+            if tilemap.is_passable(next):
                 # Calculate the cost to move to the neighbor
                 # TODO: Check, this might be reversed
                 next_x = int(next[0])
                 next_y = int(next[1])
-                new_cost = cost_so_far[current] + get_cost(map[next_y][next_x])
+                new_cost = cost_so_far[current] + get_cost(tilemap.map[next_y][next_x])
                 
                 # If the neighbor hasn't been visited or a cheaper path is found
                 if next not in cost_so_far or new_cost < cost_so_far[next]:
