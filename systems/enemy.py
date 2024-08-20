@@ -38,7 +38,7 @@ def enemy_update_system(group: EntityGroup):
             mtp = a_star(tm.map, (e.motion.position.x, e.motion.position.y), (player.motion.position.x, player.motion.position.y))
             motion.velocity = mtp
 
-            if player.motion.position == e.motion.position:
+            if player.motion.position == e.motion.position + mtp:
                 player.health.health -= e.enemy.damage
                 group.remove(e)
                 
