@@ -1,6 +1,7 @@
 from engine.assets import AssetPipeline
 from engine.ecs import Entity, EntityGroup, enumerate_component
 import os
+import math
 
 import pygame
 from pygame.surface import Surface
@@ -72,12 +73,13 @@ def draw_sprite_system(group: EntityGroup):
     
     surface: Surface = camera.camera.surface
     offset, scale = camera.camera.get_screenspace_transform(camera.motion.position)
-    sprite_scale = scale / TILE_SCALE
 
     asset_pipeline = AssetPipeline.get_instance()
-    scaled_sprites = {key: pygame.transform.scale_by(sprite, sprite_scale) for key, sprite in TILE_SPRITES.items()}
-    unknown_sprite = pygame.transform.scale_by(asset_pipeline.get_image('tiles/unknown.png'), sprite_scale)
+    tile_size = Vector2(math.ceil(scale))
+    scaled_sprites = {key: pygame.transform.scale(sprite, tile_size) for key, sprite in TILE_SPRITES.items()}
+    unknown_sprite = pygame.transform.scale(asset_pipeline.get_image('tiles/unknown.png'), tile_size)
 
+    
     tile_center = Vector2(scale / 2)
     for y in range(tilemap.bounds.left, tilemap.bounds.right):
         for x in range(tilemap.bounds.top, tilemap.bounds.bottom):
@@ -91,7 +93,7 @@ def draw_sprite_system(group: EntityGroup):
         motion: MotionComponent = e.motion
         sprite: SpriteComponent = e.sprite
         
-        scaled_sprite = pygame.transform.scale_by(sprite.surface, sprite_scale)
+        scaled_sprite = pygame.transform.scale_by(sprite.surface, scale / TILE_SCALE)
         screen_pos = motion.position * scale + offset
         sprite_center = Vector2(scaled_sprite.get_size())/2
 

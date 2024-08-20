@@ -5,10 +5,11 @@ from systems.controls import ControlComponent
 from systems.effect import EffectComponent, create_effect
 from systems.motion import Direction, MotionComponent
 from systems.sprites import CameraComponent
-from systems.tilemap import TILE_EMBER, TILE_MUD, TILE_PLANT, TILE_WATER, Tile, TilemapComponent
+from systems.tilemap import TilemapComponent, Tile
 from systems.turn import TurnComponent
 from systems.ui import UIComponent
 
+from . import tilemap
 from . import utils
 
 @enumerate_component("spell")
@@ -125,14 +126,19 @@ def spell_cast_system(group: EntityGroup):
 
 
 def mount_spell_system(group: EntityGroup):
+
     water_wave = Entity("Water wave")
-    water_wave.spell = SpellComponent(select_action="select_spell_1", effect="wave", initial_tile=TILE_WATER, color=(0,0,255))
+    water_wave.spell = SpellComponent(select_action="select_spell_1", effect="wave", initial_tile=tilemap.TILE_WATER, color=(0,0,255))
     plant_growth = Entity("Brambles")
-    plant_growth.spell = SpellComponent(select_action="select_spell_2", effect="growth", initial_tile=TILE_MUD, color=(0,255,0))
+    plant_growth.spell = SpellComponent(select_action="select_spell_2", effect="growth", initial_tile=tilemap.TILE_MUD, color=(0,255,0))
     spark = Entity("Spark")
-    spark.spell = SpellComponent(select_action="select_spell_3", effect="fire", initial_tile=TILE_PLANT, color=(0,255,0))
+    spark.spell = SpellComponent(select_action="select_spell_3", effect="fire", initial_tile=tilemap.TILE_PLANT, color=(255,0,0))
     fire_lance = Entity("Fire lance")
-    fire_lance.spell = SpellComponent(select_action="select_spell_4", effect="spark", initial_tile=TILE_EMBER, color=(255,255,0))
+    fire_lance.spell = SpellComponent(select_action="select_spell_4", effect="spark", initial_tile=tilemap.TILE_EMBER, color=(255,255,0))
+    corrupt_fill = Entity("Corrupt")
+    corrupt_fill.spell = SpellComponent(select_action="select_spell_5", effect="corrupt", initial_tile=tilemap.TILE_BONES, color=(127,0,127))
+    purify_fill = Entity("Purify")
+    purify_fill.spell = SpellComponent(select_action="select_spell_6", effect="purify", initial_tile=tilemap.TILE_EMBER, color=(255,255,200))
 
     selected_spell_entity = Entity("selected_spell")
     selected_spell_entity.selected_spell = SelectedSpellComponent()
@@ -140,7 +146,7 @@ def mount_spell_system(group: EntityGroup):
     selected_spell_entity.motion = MotionComponent(position=Vector2(10, 50))
     selected_spell_entity.tile_area = TileAreaComponent()
 
-    group.add_all(water_wave, plant_growth, spark, fire_lance)
+    group.add_all(water_wave, plant_growth, spark, fire_lance, corrupt_fill, purify_fill)
     group.add(selected_spell_entity)
 
     group.mount_system(spell_select_system)

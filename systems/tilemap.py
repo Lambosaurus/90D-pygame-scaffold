@@ -50,7 +50,14 @@ TILE_SPRITES = {
     TILE_WATER: asset_pipeline.get_image('tiles/water.png'),
     TILE_MUD: asset_pipeline.get_image('tiles/mud.png'),
     TILE_PLANT: asset_pipeline.get_image('tiles/plant.png'),
-    TILE_EMBER: asset_pipeline.get_image('tiles/ember.png')
+    TILE_EMBER: asset_pipeline.get_image('tiles/ember.png'),
+    TILE_ASH: asset_pipeline.get_image('tiles/ash.png'),
+    TILE_HELLSCAPE: asset_pipeline.get_image('tiles/hellscape.png'),
+    TILE_ICE: asset_pipeline.get_image('tiles/ice.png'),
+    TILE_LAVA: asset_pipeline.get_image('tiles/lava.png'),
+    TILE_MARSH: asset_pipeline.get_image('tiles/marsh.png'),
+    TILE_OOZE: asset_pipeline.get_image('tiles/ooze.png'),
+    TILE_ROCK: asset_pipeline.get_image('tiles/rock.png'),
 }
 
 '''

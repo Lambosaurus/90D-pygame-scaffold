@@ -35,11 +35,14 @@ class EffectComponent():
     harvests: dict[int,tuple[int,int]] = factory(dict)
     chains_to: dict[int,tuple[float,int]] = factory(dict)
     cast_from: list[int]
+    propagates_to: list[int] = factory(list)
     damage: int = 0
     consumes: list[str] = factory(list)
 
-    def add_harvest(self, tile_in: int, tile_out: int, energy: int):
+    def add_harvest(self, tile_in: int, tile_out: int, energy: int, propagates: bool = False):
         self.harvests[tile_in] = (tile_out, energy)
+        if propagates:
+            self.propagates_to.append(tile_in)
 
     def add_chain(self, tile_in: int, probability: float = 1.0, energy: int = 0):
         self.chains_to[tile_in] = (probability, energy)
@@ -62,6 +65,7 @@ Shuffles the list.
 Note this mutates the given list. I dont care.
 '''
 def shuffled(items: list) -> list:
+    items = list(items)
     random.shuffle(items)
     return items
 
@@ -125,17 +129,18 @@ def effect_update_system(group: EntityGroup):
                 ]
 
                 # Waves start waves in valid adjacent tiles
-                for coord in valid_tiles(map, effect.cast_from, utils.vector_normals(pos, dir)):
+                for coord in valid_tiles(map, effect.propagates_to, utils.vector_normals(pos, dir)):
                     propagation_request.append( (coord, 0, SHAPE_WAVE) )
                 unchecked_coords = [-dir]
 
             elif effect.shape == SHAPE_FILL:
                 # Goes out in all directions
-                valid_coords = valid_tiles(map, effect.cast_from, shuffled(utils.vector_cardinals(pos)))
+                valid_coords = valid_tiles(map, effect.propagates_to, shuffled(utils.vector_cardinals(pos)))
                 # Let the propagation step figure out if we use more energy than we have...
-                energy_transfer =  math.ceil(effect.energy) / energy_transfer
-                for coord in valid_coords:
-                    propagation_request.append( (coord, energy_transfer, SHAPE_FILL) )
+                if len(valid_coords):
+                    energy_transfer =  math.ceil(effect.energy) / len(valid_coords)
+                    for coord in valid_coords:
+                        propagation_request.append( (coord, energy_transfer, SHAPE_FILL) )
 
             elif effect.shape == SHAPE_LANCE:
                 # Goes forward only
@@ -208,41 +213,70 @@ def create_effect_templates():
     e.motion = MotionComponent(layer=motion.LAYER_EFFECTS)
     e.sprite = SpriteComponent.from_circle(16, (255,0,0))
     e.effect = EffectComponent(name="fire", cast_from=[tilemap.TILE_PLANT], shape=SHAPE_WAVE, damage=200)
-    e.effect.add_harvest(tilemap.TILE_PLANT, tilemap.TILE_EMBER, 3)
+    e.effect.add_harvest(tilemap.TILE_PLANT, tilemap.TILE_EMBER, 3, True)
     e.effect.add_harvest(tilemap.TILE_WATER, tilemap.TILE_MUD, -3)
     e.effect.add_harvest(tilemap.TILE_MUD, tilemap.TILE_EARTH, -1)
     e.effect.add_chain(tilemap.TILE_PLANT, 0.5)
     e.effect.add_consumes("growth")
     e.sound = SoundComponent(sound_file='assets/sounds/fire.mp3', volume=0.5, state=0)
-    effect_dict["fire"] = e
+    effect_dict[e.effect.name] = e
 
     e = Entity("effect-wave")
     e.motion = MotionComponent(layer=motion.LAYER_EFFECTS)
     e.sprite = SpriteComponent.from_circle(16, (0,0,255))
     e.effect = EffectComponent(name="wave", cast_from=[tilemap.TILE_WATER],shape=SHAPE_WAVE, damage=100)
-    e.effect.add_harvest(tilemap.TILE_WATER, tilemap.TILE_MUD, 3)
+    e.effect.add_harvest(tilemap.TILE_WATER, tilemap.TILE_MUD, 3, True)
     e.effect.add_harvest(tilemap.TILE_EARTH, tilemap.TILE_MUD, 0)
     e.sound = SoundComponent(sound_file='assets/sounds/splash.mp3', volume=0.5, state=0)
-    effect_dict["wave"] = e
+    effect_dict[e.effect.name] = e
 
     e = Entity("effect-growth")
     e.motion = MotionComponent(layer=motion.LAYER_EFFECTS)
     e.sprite = SpriteComponent.from_circle(16, (0,255,0))
     e.effect = EffectComponent(name="growth",cast_from=[tilemap.TILE_MUD], damage=25)
-    e.effect.add_harvest(tilemap.TILE_MUD, tilemap.TILE_PLANT, 10)
+    e.effect.add_harvest(tilemap.TILE_MUD, tilemap.TILE_PLANT, 10, True)
     e.effect.add_harvest(tilemap.TILE_EARTH, tilemap.TILE_PLANT, 0)
     e.effect.add_chain(tilemap.TILE_MUD, 0.25)
     e.effect.add_chain(tilemap.TILE_EARTH, 0.25)
     e.sound = SoundComponent(sound_file='assets/sounds/grow.mp3', volume=0.5, state=0)
-    effect_dict["growth"] = e
+    effect_dict[e.effect.name] = e
 
     e = Entity("effect-spark")
     e.motion = MotionComponent(layer=motion.LAYER_EFFECTS)
     e.sprite = SpriteComponent.from_circle(16, (255,255,0))
     e.effect = EffectComponent(name="spark",cast_from=[tilemap.TILE_EMBER], shape=SHAPE_LANCE, damage=300)
-    e.effect.add_harvest(tilemap.TILE_EMBER, tilemap.TILE_EARTH, 2)
+    e.effect.add_harvest(tilemap.TILE_EMBER, tilemap.TILE_EARTH, 2, True)
     e.sound = SoundComponent(sound_file='assets/sounds/zap.mp3', volume=0.5, state=0)
-    effect_dict["spark"] = e
+    effect_dict[e.effect.name] = e
+
+    e = Entity("effect-ice")
+    e.motion = MotionComponent(layer=motion.LAYER_EFFECTS)
+    e.sprite = SpriteComponent.from_circle(16, (127,127,255))
+    e.effect = EffectComponent(name="ice", cast_from=[tilemap.TILE_WATER], shape=SHAPE_LANCE, damage=100)
+    e.effect.add_harvest(tilemap.TILE_WATER, tilemap.TILE_ICE, 2, True)
+    effect_dict[e.effect.name] = e
+
+    e = Entity("effect-corrupt")
+    e.motion = MotionComponent(layer=motion.LAYER_EFFECTS)
+    e.sprite = SpriteComponent.from_circle(16, (127,0,127))
+    e.effect = EffectComponent(name="corrupt", cast_from=[tilemap.TILE_BONES], shape=SHAPE_FILL, damage=25)
+    e.effect.add_harvest(tilemap.TILE_ICE, tilemap.TILE_OOZE, 2, True)
+    e.effect.add_harvest(tilemap.TILE_MUD, tilemap.TILE_MARSH, 2, True)
+    e.effect.add_harvest(tilemap.TILE_EMBER, tilemap.TILE_ASH, 2, True)
+    e.effect.add_harvest(tilemap.TILE_LAVA, tilemap.TILE_HELLSCAPE, 2, True)
+    e.effect.add_harvest(tilemap.TILE_BONES, tilemap.TILE_EARTH, 4, True)
+    effect_dict[e.effect.name] = e
+
+    e = Entity("effect-purify")
+    e.motion = MotionComponent(layer=motion.LAYER_EFFECTS)
+    e.sprite = SpriteComponent.from_circle(16, (255,255,200))
+    e.effect = EffectComponent(name="purify", cast_from=[tilemap.TILE_BONES], shape=SHAPE_FILL, damage=0)
+    e.effect.add_harvest(tilemap.TILE_OOZE, tilemap.TILE_ICE, 2, True)
+    e.effect.add_harvest(tilemap.TILE_MARSH, tilemap.TILE_MUD, 2, True)
+    e.effect.add_harvest(tilemap.TILE_ASH, tilemap.TILE_EMBER, 2, True)
+    e.effect.add_harvest(tilemap.TILE_HELLSCAPE, tilemap.TILE_LAVA, 2, True)
+    e.effect.add_harvest(tilemap.TILE_BONES, tilemap.TILE_EARTH, 4, True)
+    effect_dict[e.effect.name] = e
     
     return effect_dict
 

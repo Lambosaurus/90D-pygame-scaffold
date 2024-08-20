@@ -39,15 +39,15 @@ def enemy_update_system(group: EntityGroup):
             mtp = a_star(tm.map, (e.motion.position.x, e.motion.position.y), (player.motion.position.x, player.motion.position.y))
             motion.velocity = mtp
 
-            if player.motion.position == e.motion.position:
+            if player.motion.position == e.motion.position + mtp:
+                player.health.health -= e.enemy.damage
+                group.remove(e)
+
                 hurt_sound = Entity('sound')
                 hurt_sound.sound = SoundComponent(sound_file='assets/sounds/enemy-death.mp3', volume=0.25, state=0, destroy_after_play=True)
                 hurt_sound.motion = MotionComponent(position=e.motion.position)
 
                 group.add(hurt_sound)
-
-                player.health.health -= e.enemy.damage
-                group.remove(e)
                 
         if not e.health.is_alive:
             tm.set_tile(e.motion.position, tilemap.TILE_BONES)
