@@ -46,7 +46,7 @@ def motion_update_system(group: EntityGroup):
         motion: MotionComponent = e.motion
         if motion.velocity:
             new_position = motion.position + motion.velocity
-            if tilemap.contains(new_position) and not collision.is_occupied(new_position, motion.layer):
+            if tilemap.is_passable(new_position) and not collision.is_occupied(new_position, motion.layer):
                 motion.position = new_position
             motion.velocity = Vector2(0)
             if e.contains('sound'):
