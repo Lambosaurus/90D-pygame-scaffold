@@ -4,6 +4,7 @@ from pygame import Vector2
 
 from .turn import TurnComponent
 from .tilemap import TilemapComponent
+#from .collision import CollisionComponent
 from . import utils
 
 LAYER_NONE = None
@@ -38,13 +39,14 @@ def motion_update_system(group: EntityGroup):
         return
     
     tilemap: TilemapComponent = group.query_singleton("tilemap").tilemap
+    collision = group.query_singleton("collision").collision
 
     # Update the position of all entities with a velocity
     for e in group.query('motion'):
         motion: MotionComponent = e.motion
         if motion.velocity:
             new_position = motion.position + motion.velocity
-            if tilemap.contains(new_position):
+            if tilemap.contains(new_position) and not collision.is_occupied(new_position, motion.layer):
                 motion.position = new_position
             motion.velocity = Vector2(0)
 
