@@ -27,13 +27,6 @@ def play_sound_system(group: EntityGroup):
     player_motion: MotionComponent = player_entity.motion
     controls: ControlComponent = group.query_singleton('controls').controls
 
-    if 'sound_test_start' in controls.actions:
-        test_sound = Entity('sound')
-        test_sound.sound = SoundComponent(sound_file='assets/sounds/fire.mp3', volume=0.5, state=0)
-        test_sound.motion = MotionComponent(position=player_motion.position + Vector2(20, 20) * random.random())
-
-        group.add(test_sound)
-
     for entity in group.query('sound', 'motion'):
         sound: SoundComponent = entity.sound
         motion: MotionComponent = entity.motion

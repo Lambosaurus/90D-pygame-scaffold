@@ -1,3 +1,4 @@
+import pygame
 from init import init
 from engine.window import Window
 from engine.ecs import EntityGroup
@@ -7,6 +8,8 @@ import systems
 # Build objects
 window = Window()
 group = EntityGroup()
+
+pygame.display.set_mode((1600, 1200), pygame.RESIZABLE)
 
 # Load systems onto the group
 # Note, systems will be run in the order they are mounted
