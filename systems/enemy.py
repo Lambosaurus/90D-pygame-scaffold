@@ -164,7 +164,7 @@ def a_star(tilemap: TilemapComponent, e_pos, p_pos):
         for next in neighbors:
             # Check if next position is within grid bounds
 
-            if tilemap.is_passable(next):
+            if tilemap.contains(next):
                 # Calculate the cost to move to the neighbor
                 # TODO: Check, this might be reversed
                 next_x = int(next[0])
