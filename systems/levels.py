@@ -8,7 +8,7 @@ from systems.sprites import CameraComponent
 from systems.tilemap import TilemapComponent
 from systems.turn import TURN_PLAYER, TurnComponent
 from systems.ui import UIComponent
-from systems.utils import round_vector
+from systems.utils import clamp_vector, round_vector
 
 
 ENEMY_TYPES = {
@@ -19,7 +19,7 @@ ENEMY_TYPES = {
 
 LEVELS = {
     1: {
-        'spawn_area': (67, 56, 5, 5),  # x, y, length, width
+        'spawn_area': (66, 56, 5, 5),  # x, y, length, width
         'enemies': {
             'mook': 5,
             'boss': 1
@@ -35,31 +35,31 @@ LEVELS = {
         'map_bounds': (22, 22)
     },
     3: {
-        'spawn_area': (51, 51, 4, 4),
+        'spawn_area': (50, 50, 4, 4),
         'enemies': {
             'mook': 20,
             'boss': 8
         },
-        'map_bounds': (27, 27)
+        'map_bounds': (28, 28)
     },
     4: {
-        'spawn_area': (81, 81, 12, 12),
+        'spawn_area': (69, 69, 12, 12),
         'enemies': {
             'mook': 30,
             'boss': 16
         },
-        'map_bounds': (35, 35)
+        'map_bounds': (36, 36)
     },
     5: {
-        'spawn_area': (86, 86, 35, 35),
+        'spawn_area': (51, 51, 35, 35),
         'enemies': {
             'mook': 50,
             'boss': 32
         },
-        'map_bounds': (45, 45)
+        'map_bounds': (46, 46)
     },
     6: {
-        'spawn_area': (69, 69, 42, 42),
+        'spawn_area': (50, 50, 42, 42),
         'enemies': {
             'mook': 80,
             'boss': 32
@@ -67,7 +67,7 @@ LEVELS = {
         'map_bounds': (58, 58)
     },
     7: {
-        'spawn_area': (56, 56, 42, 42),
+        'spawn_area': (29, 29, 42, 42),
         'enemies': {
             'mook': 120,
             'boss': 32
@@ -80,7 +80,7 @@ LEVELS = {
             'mook': 160,
             'boss': 32
         },
-        'map_bounds': (93, 93)
+        'map_bounds': (94, 94)
     },
     9: {
         'spawn_area': (0, 0, 128, 128),
@@ -158,6 +158,7 @@ def level_progression_system(group: EntityGroup):
 
 def spawn_enemy_system(group: EntityGroup):
     turn: TurnComponent = group.query_singleton('turn').turn
+    tilemap: TilemapComponent = group.query_singleton('tilemap').tilemap
 
     spawn_entities = group.query('spawn', 'motion')
     for spawn_entity in spawn_entities:
@@ -173,10 +174,12 @@ def spawn_enemy_system(group: EntityGroup):
 
 
         random_spawn = round_vector(Vector2(spawn_area.topleft) + Vector2(spawn_area.size) * random.random())
+        map_bounds = tilemap.bounds
+        clamped_spawn = clamp_vector(random_spawn, Vector2(map_bounds.topleft), Vector2(map_bounds.bottomright) - Vector2(1))
         spawn.last_spawned_turn = turn.number
         spawn.count -= 1
         enemy = ENEMY_TYPES.get(spawn.enemy_type).clone()
-        enemy.motion.position = Vector2(random_spawn)
+        enemy.motion.position = clamped_spawn
         group.add(enemy)
 
 def game_state_system(group: EntityGroup):
