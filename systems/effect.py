@@ -261,6 +261,7 @@ def create_effect_templates():
     e.effect = EffectComponent(name="ice", cast_from=[tilemap.TILE_WATER], shape=SHAPE_LANCE, damage=100)
     e.effect.add_harvest(tilemap.TILE_WATER, tilemap.TILE_ICE, 2, True)
     e.effect.add_harvest(tilemap.TILE_HELLSCAPE, tilemap.TILE_ASH, 1, True)
+    e.sound = SoundComponent(sound_file='assets/sounds/ice.mp3', volume=0.5, state=0)
     effect_dict[e.effect.name] = e
 
     e = Entity("effect-corrupt")
@@ -272,6 +273,7 @@ def create_effect_templates():
     e.effect.add_harvest(tilemap.TILE_EMBER, tilemap.TILE_ASH, 2, True)
     e.effect.add_harvest(tilemap.TILE_LAVA, tilemap.TILE_HELLSCAPE, 2, True)
     e.effect.add_harvest(tilemap.TILE_BONES, tilemap.TILE_EARTH, 4, True)
+    e.sound = SoundComponent(sound_file='assets/sounds/curse.mp3', volume=0.5, state=0)
     effect_dict[e.effect.name] = e
 
     e = Entity("effect-purify")
@@ -283,6 +285,7 @@ def create_effect_templates():
     e.effect.add_harvest(tilemap.TILE_ASH, tilemap.TILE_EMBER, 2, True)
     e.effect.add_harvest(tilemap.TILE_HELLSCAPE, tilemap.TILE_LAVA, 2, True)
     e.effect.add_harvest(tilemap.TILE_BONES, tilemap.TILE_EARTH, 4, True)
+    e.sound = SoundComponent(sound_file='assets/sounds/purify.mp3', volume=0.5, state=0)
     effect_dict[e.effect.name] = e
     
     return effect_dict
