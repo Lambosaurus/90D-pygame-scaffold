@@ -22,6 +22,7 @@ key_mapping = {
     pygame.K_7: ["select_spell_7"],
     pygame.K_8: ["select_spell_8"],
     pygame.K_9: ["select_spell_9"],
+    pygame.K_g: ["sound_test"],
 }
 
 '''

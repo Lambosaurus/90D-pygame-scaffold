@@ -49,6 +49,8 @@ def motion_update_system(group: EntityGroup):
             if tilemap.contains(new_position) and not collision.is_occupied(new_position, motion.layer):
                 motion.position = new_position
             motion.velocity = Vector2(0)
+            if e.contains('sound'):
+                e.sound.state = e.sound.STATE_PLAY
 
 '''
 Mounts systems for updating motion components

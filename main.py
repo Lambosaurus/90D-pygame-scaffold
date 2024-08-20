@@ -23,6 +23,7 @@ systems.health.mount_health_system(group)
 systems.sprites.mount_sprite_system(group, window.surface)
 systems.spell.mount_spell_system(group)
 systems.ui.mount_ui_system(group)
+systems.sounds.mount_sound_system(group)
 
 # Game Initialization
 init(group, window)

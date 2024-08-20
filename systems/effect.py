@@ -4,6 +4,8 @@ from dataclasses import dataclass
 import random
 import math
 
+from systems.sounds import SoundComponent
+
 from .sprites import SpriteComponent
 from .motion import MotionComponent
 from .tilemap import TilemapComponent
@@ -191,6 +193,8 @@ def propagate_entity(e: Entity, position: Vector2, energy: int, shape: int | Non
     e = e.clone()
     e.motion.position = position
     e.effect.energy = energy
+    if e.contains('sound'):
+        e.sound.state = SoundComponent.STATE_PLAY
 
     # The shape may be overridden
     if shape != None:
@@ -214,6 +218,7 @@ def create_effect_templates():
     e.effect.add_harvest(tilemap.TILE_MUD, tilemap.TILE_EARTH, -1)
     e.effect.add_chain(tilemap.TILE_PLANT, 0.5)
     e.effect.add_consumes("growth")
+    e.sound = SoundComponent(sound_file='assets/sounds/fire.mp3', volume=0.5, state=0)
     effect_dict[e.effect.name] = e
 
     e = Entity("effect-wave")
@@ -222,6 +227,7 @@ def create_effect_templates():
     e.effect = EffectComponent(name="wave", cast_from=[tilemap.TILE_WATER],shape=SHAPE_WAVE, damage=100)
     e.effect.add_harvest(tilemap.TILE_WATER, tilemap.TILE_MUD, 3, True)
     e.effect.add_harvest(tilemap.TILE_EARTH, tilemap.TILE_MUD, 0)
+    e.sound = SoundComponent(sound_file='assets/sounds/splash.mp3', volume=0.5, state=0)
     effect_dict[e.effect.name] = e
 
     e = Entity("effect-growth")
@@ -232,6 +238,7 @@ def create_effect_templates():
     e.effect.add_harvest(tilemap.TILE_EARTH, tilemap.TILE_PLANT, 0)
     e.effect.add_chain(tilemap.TILE_MUD, 0.25)
     e.effect.add_chain(tilemap.TILE_EARTH, 0.25)
+    e.sound = SoundComponent(sound_file='assets/sounds/grow.mp3', volume=0.5, state=0)
     effect_dict[e.effect.name] = e
 
     e = Entity("effect-spark")
@@ -239,6 +246,7 @@ def create_effect_templates():
     e.sprite = SpriteComponent.from_resource("effects/spark.png")
     e.effect = EffectComponent(name="spark",cast_from=[tilemap.TILE_EMBER], shape=SHAPE_LANCE, damage=300)
     e.effect.add_harvest(tilemap.TILE_EMBER, tilemap.TILE_EARTH, 2, True)
+    e.sound = SoundComponent(sound_file='assets/sounds/zap.mp3', volume=0.5, state=0)
     effect_dict[e.effect.name] = e
 
     e = Entity("effect-ice")

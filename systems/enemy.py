@@ -1,5 +1,6 @@
 from pygame import Vector2
 from engine.ecs import Entity, EntityGroup, enumerate_component
+from systems.sounds import SoundComponent
 from .motion import MotionComponent
 from .sprites import SpriteComponent
 from .player import PlayerComponent
@@ -41,10 +42,22 @@ def enemy_update_system(group: EntityGroup):
             if player.motion.position == e.motion.position + mtp:
                 player.health.health -= e.enemy.damage
                 group.remove(e)
+
+                hurt_sound = Entity('sound')
+                hurt_sound.sound = SoundComponent(sound_file='assets/sounds/enemy-death.mp3', volume=0.25, state=0, destroy_after_play=True)
+                hurt_sound.motion = MotionComponent(position=e.motion.position)
+
+                group.add(hurt_sound)
                 
         if not e.health.is_alive:
             tm.set_tile(e.motion.position, tilemap.TILE_BONES)
             group.remove(e)
+
+            hurt_sound = Entity('sound')
+            hurt_sound.sound = SoundComponent(sound_file='assets/sounds/enemy-death.mp3', volume=0.25, state=0, destroy_after_play=True)
+            hurt_sound.motion = MotionComponent(position=e.motion.position)
+
+            group.add(hurt_sound)
 
 
 '''
@@ -82,6 +95,7 @@ def create_enemy(position = tuple[int, int]):
     enemy.sprite = SpriteComponent.from_resource("creatures/enemy.png")
     enemy.motion = MotionComponent(layer=motion.LAYER_ENEMIES, position = Vector2(position))
     enemy.health = HealthComponent(health = 100)
+    enemy.sound = SoundComponent(sound_file='assets/sounds/enemy-move.mp3', volume=0.5, state=-1)
 
     return enemy
 
