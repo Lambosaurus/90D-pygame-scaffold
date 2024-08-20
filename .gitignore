@@ -10,3 +10,5 @@ build/
 launch.json
 
 .DS_Store
+
+Thumbs.db

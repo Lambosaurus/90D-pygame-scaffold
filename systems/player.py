@@ -79,7 +79,7 @@ Adds the player character, and mounts systems for updating the player with the c
 def mount_player_system(group: EntityGroup):
     player = Entity("player")
     player.player = PlayerComponent()
-    player.motion = MotionComponent(layer=motion.LAYER_PLAYER, position=Vector2(128,128))
+    player.motion = MotionComponent(layer=motion.LAYER_PLAYER, position=Vector2(64,64))
     player.sprite = SpriteComponent.from_resource("player/player_down.png")
     player.health = HealthComponent(health = 100)
     player.sound = SoundComponent(sound_file='assets/sounds/step.mp3', volume=0.5, state=-1)

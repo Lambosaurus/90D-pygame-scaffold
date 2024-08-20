@@ -19,7 +19,7 @@ ENEMY_TYPES = {
 
 LEVELS = {
     1: {
-        'spawn_area': (120, 120, 1, 16),
+        'spawn_area': (67, 56, 5, 5),  # x, y, length, width
         'enemies': {
             'mook': 5,
             'boss': 1
@@ -27,36 +27,76 @@ LEVELS = {
         'map_bounds': (16, 16)
     },
     2: {
-        'spawn_area': (112, 112, 1, 32),
+        'spawn_area': (53, 53, 5, 5),
         'enemies': {
-            'mook': 20,
+            'mook': 10,
             'boss': 4
         },
-        'map_bounds': (32, 32)
+        'map_bounds': (22, 22)
     },
     3: {
-        'spawn_area': (130, 150, 4, 4),
+        'spawn_area': (51, 51, 4, 4),
         'enemies': {
-            'mook': 40,
+            'mook': 20,
             'boss': 8
         },
-        'map_bounds': (64, 64)
+        'map_bounds': (27, 27)
     },
     4: {
-        'spawn_area': (150, 150, 12, 12),
+        'spawn_area': (81, 81, 12, 12),
         'enemies': {
-            'mook': 80,
+            'mook': 30,
             'boss': 16
         },
-        'map_bounds': (128, 128)
+        'map_bounds': (35, 35)
     },
     5: {
-        'spawn_area': (0, 0, 256, 256),
+        'spawn_area': (86, 86, 35, 35),
+        'enemies': {
+            'mook': 50,
+            'boss': 32
+        },
+        'map_bounds': (45, 45)
+    },
+    6: {
+        'spawn_area': (69, 69, 42, 42),
+        'enemies': {
+            'mook': 80,
+            'boss': 32
+        },
+        'map_bounds': (58, 58)
+    },
+    7: {
+        'spawn_area': (56, 56, 42, 42),
+        'enemies': {
+            'mook': 120,
+            'boss': 32
+        },
+        'map_bounds': (72, 72)
+    },
+    8: {
+        'spawn_area': (35, 35, 42, 42),
         'enemies': {
             'mook': 160,
             'boss': 32
         },
-        'map_bounds': (256, 256)
+        'map_bounds': (93, 93)
+    },
+    9: {
+        'spawn_area': (0, 0, 128, 128),
+        'enemies': {
+            'mook': 200,
+            'boss': 32
+        },
+        'map_bounds': (128, 128)
+    },
+    10: {
+        'spawn_area': (0, 0, 128, 128),
+        'enemies': {
+            'mook': 300,
+            'boss': 32
+        },
+        'map_bounds': (128, 128)
     }
 }
 
