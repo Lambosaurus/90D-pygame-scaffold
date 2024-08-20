@@ -6,10 +6,8 @@ from engine.ecs import EntityGroup
 import systems
 
 # Build objects
-window = Window()
+window = Window((1600, 1200), "Spellscale")
 group = EntityGroup()
-
-pygame.display.set_mode((1600, 1200), pygame.RESIZABLE)
 
 # Load systems onto the group
 # Note, systems will be run in the order they are mounted

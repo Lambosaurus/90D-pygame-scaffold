@@ -61,6 +61,13 @@ TILE_SPRITES = {
     TILE_BONES: asset_pipeline.get_image('tiles/bones.png'),
 }
 
+IMPASSABLE_TILES = [
+    TILE_ROCK,
+    TILE_ICE,
+    TILE_WATER,
+    TILE_LAVA
+]
+
 '''
 Component that stores a tilemap
 '''
@@ -83,6 +90,12 @@ class TilemapComponent():
 
     def contains(self, coord: Union[Vector2, tuple[int, int]]):
         return self.bounds.contains(coord, (0, 0))
+    
+    def is_passable(self, coord: Union[Vector2, tuple[int, int]]):
+        if self.contains(coord):
+            tile = self.get_tile(coord)
+            return not tile in IMPASSABLE_TILES
+        return False 
 
     @staticmethod
     def from_map(map: Tilemap):

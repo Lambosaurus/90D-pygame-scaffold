@@ -1,2 +1,2 @@
 pyinstaller main.py
-cp assets dist/main/assets
+robocopy assets dist/main/assets /s

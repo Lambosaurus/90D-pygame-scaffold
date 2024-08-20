@@ -78,8 +78,14 @@ def draw_sprite_system(group: EntityGroup):
     tile_size = Vector2(math.ceil(scale))
     scaled_sprites = {key: pygame.transform.scale(sprite, tile_size) for key, sprite in TILE_SPRITES.items()}
     unknown_sprite = pygame.transform.scale(asset_pipeline.get_image('tiles/unknown.png'), tile_size)
-
+    selected_spell = group.query_singleton('selected_spell').selected_spell
     
+    if selected_spell.target_tile:
+        for i, tile in enumerate(selected_spell.target_tile):
+            hint_sprite = TILE_SPRITES.get(tile) or asset_pipeline.get_image('tiles/unknown.png')
+            hint_pos = (10 + i * 40, 80)
+            surface.blit(hint_sprite, hint_pos)
+
     tile_center = Vector2(scale / 2)
     for y in range(tilemap.bounds.left, tilemap.bounds.right):
         for x in range(tilemap.bounds.top, tilemap.bounds.bottom):
