@@ -53,6 +53,12 @@ def enemy_update_system(group: EntityGroup):
             tm.set_tile(e.motion.position, tilemap.TILE_BONES)
             group.remove(e)
 
+            hurt_sound = Entity('sound')
+            hurt_sound.sound = SoundComponent(sound_file='assets/sounds/enemy-death.mp3', volume=0.25, state=0, destroy_after_play=True)
+            hurt_sound.motion = MotionComponent(position=e.motion.position)
+
+            group.add(hurt_sound)
+
 
 '''
 Mount system
