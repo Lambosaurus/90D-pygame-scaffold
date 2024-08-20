@@ -216,6 +216,8 @@ def create_effect_templates():
     e.effect.add_harvest(tilemap.TILE_PLANT, tilemap.TILE_EMBER, 3, True)
     e.effect.add_harvest(tilemap.TILE_WATER, tilemap.TILE_MUD, -3)
     e.effect.add_harvest(tilemap.TILE_MUD, tilemap.TILE_EARTH, -1)
+    e.effect.add_harvest(tilemap.TILE_ICE, tilemap.TILE_WATER, -3)
+    e.effect.add_harvest(tilemap.TILE_ROCK, tilemap.TILE_LAVA, -5)
     e.effect.add_chain(tilemap.TILE_PLANT, 0.5)
     e.effect.add_consumes("growth")
     e.sound = SoundComponent(sound_file='assets/sounds/fire.mp3', volume=0.5, state=0)
@@ -227,25 +229,29 @@ def create_effect_templates():
     e.effect = EffectComponent(name="wave", cast_from=[tilemap.TILE_WATER],shape=SHAPE_WAVE, damage=100)
     e.effect.add_harvest(tilemap.TILE_WATER, tilemap.TILE_MUD, 3, True)
     e.effect.add_harvest(tilemap.TILE_EARTH, tilemap.TILE_MUD, 0)
+    e.effect.add_harvest(tilemap.TILE_EMBER, tilemap.TILE_ROCK, -1)
     e.sound = SoundComponent(sound_file='assets/sounds/splash.mp3', volume=0.5, state=0)
     effect_dict[e.effect.name] = e
 
     e = Entity("effect-growth")
     e.motion = MotionComponent(layer=motion.LAYER_EFFECTS)
     e.sprite = SpriteComponent.from_resource("effects/growth.png")
-    e.effect = EffectComponent(name="growth",cast_from=[tilemap.TILE_MUD], damage=25)
+    e.effect = EffectComponent(name="growth",cast_from=[tilemap.TILE_MUD, tilemap.TILE_ASH], damage=25)
     e.effect.add_harvest(tilemap.TILE_MUD, tilemap.TILE_PLANT, 10, True)
     e.effect.add_harvest(tilemap.TILE_EARTH, tilemap.TILE_PLANT, 0)
+    e.effect.add_harvest(tilemap.TILE_ASH, tilemap.TILE_PLANT, 7)
     e.effect.add_chain(tilemap.TILE_MUD, 0.25)
     e.effect.add_chain(tilemap.TILE_EARTH, 0.25)
+    e.effect.add_chain(tilemap.TILE_MARSH, 0.25)
     e.sound = SoundComponent(sound_file='assets/sounds/grow.mp3', volume=0.5, state=0)
     effect_dict[e.effect.name] = e
 
     e = Entity("effect-spark")
     e.motion = MotionComponent(layer=motion.LAYER_EFFECTS)
     e.sprite = SpriteComponent.from_resource("effects/spark.png")
-    e.effect = EffectComponent(name="spark",cast_from=[tilemap.TILE_EMBER], shape=SHAPE_LANCE, damage=300)
+    e.effect = EffectComponent(name="spark",cast_from=[tilemap.TILE_EMBER,tilemap.TILE_MARSH], shape=SHAPE_LANCE, damage=300)
     e.effect.add_harvest(tilemap.TILE_EMBER, tilemap.TILE_EARTH, 2, True)
+    e.effect.add_harvest(tilemap.TILE_MARSH, tilemap.TILE_OOZE, 2, True)
     e.sound = SoundComponent(sound_file='assets/sounds/zap.mp3', volume=0.5, state=0)
     effect_dict[e.effect.name] = e
 
@@ -254,6 +260,7 @@ def create_effect_templates():
     e.sprite = SpriteComponent.from_resource("effects/ice.png")
     e.effect = EffectComponent(name="ice", cast_from=[tilemap.TILE_WATER], shape=SHAPE_LANCE, damage=100)
     e.effect.add_harvest(tilemap.TILE_WATER, tilemap.TILE_ICE, 2, True)
+    e.effect.add_harvest(tilemap.TILE_HELLSCAPE, tilemap.TILE_ASH, 1, True)
     effect_dict[e.effect.name] = e
 
     e = Entity("effect-corrupt")

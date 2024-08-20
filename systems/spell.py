@@ -16,7 +16,7 @@ from . import utils
 class SpellComponent:
     select_action: str
     effect: str = "wave"
-    initial_tile: Tile = None
+    initial_tile: list[Tile] = factory(list)
     color: tuple[int,int,int]
 
 
@@ -24,7 +24,7 @@ class SpellComponent:
 class SelectedSpellComponent:
     spell_action: str = None
     spell_casting_start: Vector2 = None
-    target_tile: Tile = None
+    target_tile: list[Tile] = None
     spell_color: tuple[int,int,int] = None
 
 @enumerate_component("tile_area")
@@ -39,14 +39,7 @@ def find_positions(map: TilemapComponent, coords: Vector2, value, checked = []):
     if tile == value and coords not in checked:
         positions.append(coords)
 
-        to_check = [
-            coords + Direction.UP,
-            coords + Direction.RIGHT,
-            coords + Direction.DOWN,
-            coords + Direction.LEFT
-        ]
-
-        for check_coord in to_check:
+        for check_coord in utils.vector_cardinals(coords):
             if check_coord in checked:
                 continue
 
@@ -60,13 +53,12 @@ def spell_tile_detection_system(group: EntityGroup):
     selected_spell_entity = group.query_singleton('selected_spell', 'tile_area')
     selected_spell: SelectedSpellComponent = selected_spell_entity.selected_spell
     tile_area: TileAreaComponent = selected_spell_entity.tile_area
-    target_tile = selected_spell.target_tile
     positions = []
 
-    positions += find_positions(tilemap, motion.position + Direction.UP, target_tile, positions)
-    positions += find_positions(tilemap, motion.position + Direction.RIGHT, target_tile, positions)
-    positions += find_positions(tilemap, motion.position + Direction.DOWN, target_tile, positions)
-    positions += find_positions(tilemap, motion.position + Direction.LEFT, target_tile, positions)
+    for v in utils.vector_cardinals(motion.position):
+        tile = tilemap.get_tile(v)
+        if tile in selected_spell.target_tile:
+            positions += find_positions(tilemap, v, tile, positions)
 
     tile_area.tile_positions = positions
     
@@ -128,17 +120,17 @@ def spell_cast_system(group: EntityGroup):
 def mount_spell_system(group: EntityGroup):
 
     water_wave = Entity("Water wave")
-    water_wave.spell = SpellComponent(select_action="select_spell_1", effect="wave", initial_tile=tilemap.TILE_WATER, color=(0,0,255))
+    water_wave.spell = SpellComponent(select_action="select_spell_1", effect="wave", initial_tile=[tilemap.TILE_WATER], color=(0,0,255))
     plant_growth = Entity("Brambles")
-    plant_growth.spell = SpellComponent(select_action="select_spell_2", effect="growth", initial_tile=tilemap.TILE_MUD, color=(0,255,0))
+    plant_growth.spell = SpellComponent(select_action="select_spell_2", effect="growth", initial_tile=[tilemap.TILE_MUD, tilemap.TILE_ASH], color=(0,255,0))
     spark = Entity("Spark")
-    spark.spell = SpellComponent(select_action="select_spell_3", effect="fire", initial_tile=tilemap.TILE_PLANT, color=(255,0,0))
+    spark.spell = SpellComponent(select_action="select_spell_3", effect="fire", initial_tile=[tilemap.TILE_PLANT], color=(255,0,0))
     fire_lance = Entity("Fire lance")
-    fire_lance.spell = SpellComponent(select_action="select_spell_4", effect="spark", initial_tile=tilemap.TILE_EMBER, color=(255,255,0))
+    fire_lance.spell = SpellComponent(select_action="select_spell_4", effect="spark", initial_tile=[tilemap.TILE_EMBER, tilemap.TILE_MARSH], color=(255,255,0))
     corrupt_fill = Entity("Corrupt")
-    corrupt_fill.spell = SpellComponent(select_action="select_spell_5", effect="corrupt", initial_tile=tilemap.TILE_BONES, color=(127,0,127))
+    corrupt_fill.spell = SpellComponent(select_action="select_spell_5", effect="corrupt", initial_tile=[tilemap.TILE_BONES], color=(127,0,127))
     purify_fill = Entity("Purify")
-    purify_fill.spell = SpellComponent(select_action="select_spell_6", effect="purify", initial_tile=tilemap.TILE_EMBER, color=(255,255,200))
+    purify_fill.spell = SpellComponent(select_action="select_spell_6", effect="purify", initial_tile=[tilemap.TILE_BONES], color=(255,255,200))
 
     selected_spell_entity = Entity("selected_spell")
     selected_spell_entity.selected_spell = SelectedSpellComponent()
